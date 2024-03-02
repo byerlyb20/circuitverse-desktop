@@ -29,12 +29,12 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src/components', import.meta.url)),
         },
     },
-    base: '/simulatorvue/',
-    build: {
-        outDir: '../public/simulatorvue',
-        assetsDir: 'assets',
-        chunkSizeWarningLimit: 1600,
-    },
+    base: '',
+    // build: {
+    //     outDir: '../public/simulatorvue',
+    //     assetsDir: 'assets',
+    //     chunkSizeWarningLimit: 1600,
+    // },
     server: {
         port: 4000,
         proxy: {

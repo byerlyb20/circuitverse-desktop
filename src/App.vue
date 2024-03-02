@@ -1,8 +1,9 @@
 <template>
-    <router-view />
+    <simulator />
 </template>
 
 <script lang="ts" setup>
+    import simulator from '#/pages/simulator.vue'
 // import { defineComponent } from 'vue'
 
 // export default defineComponent({
