@@ -32,6 +32,8 @@ import '../vendor/jquery-ui.min'
 import { confirmSingleOption } from '#/components/helpers/confirmComponent/ConfirmComponent.vue'
 import { getToken } from '#/pages/simulatorHandler.vue'
 
+const toolbarDisabled = true
+
 /**
  * to resize window and setup things it
  * sets up new width for the canvas variables.
@@ -45,7 +47,7 @@ export function resetup() {
         DPR = 1
     }
     width = document.getElementById('simulationArea').clientWidth * DPR
-    if (!embed) {
+    if (!embed && !toolbarDisabled) {
         height =
             (document.body.clientHeight -
                 document.getElementById('toolbar').clientHeight) *

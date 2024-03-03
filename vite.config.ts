@@ -37,16 +37,16 @@ export default defineConfig({
     },
     server: {
         port: 4000,
-        proxy: {
-            // ...(process.env.NODE_ENV === 'development' && {
-            '^/(?!(simulatorvue)).*': {
-                target: proxyUrl,
-                changeOrigin: true,
-                headers: {
-                    origin: proxyUrl,
-                },
-            },
-            // }),
-        },
+        // proxy: {
+        //     // ...(process.env.NODE_ENV === 'development' && {
+        //     '^/(?!(simulatorvue)).*': {
+        //         target: proxyUrl,
+        //         changeOrigin: true,
+        //         headers: {
+        //             origin: proxyUrl,
+        //         },
+        //     },
+        //     // }),
+        // },
     },
 })
