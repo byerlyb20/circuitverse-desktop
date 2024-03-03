@@ -30,11 +30,11 @@ export default defineConfig({
         },
     },
     base: '',
-    // build: {
-    //     outDir: '../public/simulatorvue',
-    //     assetsDir: 'assets',
-    //     chunkSizeWarningLimit: 1600,
-    // },
+    build: {
+        // outDir: '../public/simulatorvue',
+        // assetsDir: 'assets',
+        // chunkSizeWarningLimit: 1600,
+    },
     server: {
         port: 4000,
         proxy: {
