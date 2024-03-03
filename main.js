@@ -1,12 +1,18 @@
 const { app, BrowserWindow, Menu } = require('electron')
+const path = require('node:path')
+
+let mainWindow
 
 const createWindow = () => {
-    const win = new BrowserWindow({
+    mainWindow = new BrowserWindow({
       width: 1200,
-      height: 900
+      height: 900,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js')
+      }
     })
   
-    win.loadFile('dist/index.html')
+    mainWindow.loadFile('dist/index.html')
 }
 
 const isMac = process.platform === 'darwin'
@@ -36,9 +42,20 @@ const template = [
   {
     label: 'File',
     submenu: [
-      { label: '&New File...' },
-      { label: '&Open...' },
-      { label: '&Save' },
+      {
+        label: '&New File...',
+        click: () => mainWindow.webContents.send('new-file')
+      },
+      { type: 'separator' },
+      {
+        label: '&Open...',
+        click: () => mainWindow.webContents.send('open')
+      },
+      { type: 'separator' },
+      {
+        label: '&Save',
+        click: () => mainWindow.webContents.send('save')
+      },
       isMac ? { role: 'close' } : { role: 'quit' }
     ]
   },
@@ -76,25 +93,50 @@ const template = [
   {
     label: 'Circuit',
     submenu: [
-      { label: 'New Verilog Module' },
-      { label: 'Insert Subcircuit' }
+      {
+        label: 'New Verilog Module',
+        click: () => mainWindow.webContents.send('new-verilog-module')
+      },
+      {
+        label: 'Insert Subcircuit',
+        click: () => mainWindow.webContents.send('insert-subcircuit')
+      }
     ]
   },
   {
     label: 'Tools',
     submenu: [
-      { label: 'Combinational Analysis' },
-      { label: 'Hex-Bin-Dec Converter' },
-      { label: 'Save Image' },
-      { label: 'Themes' },
-      { label: 'Custom Shortcut' },
-      { label: 'Export Verilog' },
+      {
+        label: 'Combinational Analysis',
+        click: () => mainWindow.webContents.send('combinational-analysis')
+      },
+      {
+        label: 'Hex-Bin-Dec Converter',
+        click: () => mainWindow.webContents.send('hex-converter')
+      },
+      {
+        label: 'Save Image',
+        click: () => mainWindow.webContents.send('save-image')
+      },
+      {
+        label: 'Themes',
+        click: () => mainWindow.webContents.send('themes')
+      },
+      {
+        label: 'Export Verilog',
+        click: () => mainWindow.webContents.send('export-verilog')
+      },
     ]
   },
   // { role: 'viewMenu' }
   {
     label: 'View',
     submenu: [
+      {
+        label: 'Preview Circuit',
+        click: () => mainWindow.webContents.send('preview-circuit')
+      },
+      { type: 'separator' },
       { role: 'reload' },
       { role: 'forceReload' },
       { role: 'toggleDevTools' },
