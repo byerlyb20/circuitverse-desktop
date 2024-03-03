@@ -298,11 +298,6 @@
     <!-- Dialog Box - Hex Bin Dec --------------------------------------------------------------------------------------------- -->
     <HexBinDec />
     <!-- --------------------------------------------------------------------------------------------- -->
-
-    <!-- --------------------------------------------------------------------------------------------- -->
-    <!---issue reporting-system----->
-    <ReportIssue />
-    <!-- --------------------------------------------------------------------------------------------- -->
 </template>
 
 <script lang="ts" setup>
@@ -319,5 +314,4 @@ import ExportVerilog from './DialogBox/ExportVerilog.vue'
 import CustomShortcut from './DialogBox/CustomShortcut.vue'
 import InsertSubcircuit from './DialogBox/InsertSubcircuit.vue'
 import OpenOffline from './DialogBox/OpenOffline.vue'
-import ReportIssue from './ReportIssue/ReportIssue.vue'
 </script>
