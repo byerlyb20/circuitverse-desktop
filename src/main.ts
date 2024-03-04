@@ -6,6 +6,7 @@ import router from './router/index'
 import { createPinia } from 'pinia'
 import { loadFonts } from './plugins/webfontloader'
 import i18n from './locales/i18n'
+import load from '#/simulator/src/data/load'
 
 import 'bootstrap'
 
@@ -31,7 +32,48 @@ app.use(i18n)
 app.mount('#app')
 
 window.electronAPI.onNewFile(() => logixFunction.newProject(false))
-window.electronAPI.onOpen(() => logixFunction.ImportProject())
+
+// Adapted from components/DialogBox/ImportProject.vue
+window.electronAPI.onOpen((fileData) => {
+    const scopeSchema = [
+        'layout',
+        'verilogMetadata',
+        'allNodes',
+        'id',
+        'name',
+        'restrictedCircuitElementsUsed',
+        'nodes',
+    ]
+    const JSONSchema = [
+        'name',
+        'timePeriod',
+        'clockEnabled',
+        'projectId',
+        'focussedCircuit',
+        'orderedTabs',
+        'scopes',
+    ]
+    try {
+        const parsedFileDate = JSON.parse(fileData)
+        if (
+            JSON.stringify(Object.keys(parsedFileDate)) !==
+            JSON.stringify(JSONSchema)
+        )
+            throw new Error('Invalid JSON data')
+        parsedFileDate.scopes.forEach((scope: object) => {
+            const keys = Object.keys(scope) // get scope keys
+            scopeSchema.forEach((key) => {
+                if (!keys.includes(key)) throw new Error('Invalid Scope data')
+            })
+        })
+        load(parsedFileDate)
+        return true
+    } catch (error) {
+        console.log('Invalid / Corrupt [ .cv ] file !')
+        return false
+    }
+})
+
 window.electronAPI.onSave(() => logixFunction.ExportProject())
 window.electronAPI.onNewVerilogModule(() => logixFunction.newVerilogModule())
 window.electronAPI.onInsertSubcircuit(() => logixFunction.createSubCircuitPrompt())

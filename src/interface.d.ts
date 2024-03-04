@@ -1,6 +1,6 @@
 export interface IElectronAPI {
     onNewFile: (callback: () => void) => void,
-    onOpen: (callback: () => void) => void,
+    onOpen: (callback: (data: string) => void) => void,
     onSave: (callback: () => void) => void,
     onNewVerilogModule: (callback: () => void) => void,
     onInsertSubcircuit: (callback: () => void) => void,

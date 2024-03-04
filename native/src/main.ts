@@ -1,7 +1,9 @@
-const { app, BrowserWindow, Menu } = require('electron')
-const path = require('node:path')
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron'
+import path from 'node:path'
 
-let mainWindow
+import { openFile } from './file.js'
+
+let mainWindow: BrowserWindow
 
 const createWindow = () => {
     mainWindow = new BrowserWindow({
@@ -12,32 +14,15 @@ const createWindow = () => {
       }
     })
   
-    mainWindow.loadFile('dist/index.html')
+    mainWindow.loadFile('../dist/index.html')
 }
 
 const isMac = process.platform === 'darwin'
-const openLinkCallback = link => async () => {
+const openLinkCallback = (link: string) => async () => {
   const { shell } = require('electron')
   await shell.openExternal(link)
 }
-const template = [
-  // { role: 'appMenu' }
-  ...(isMac
-    ? [{
-        label: app.name,
-        submenu: [
-          { role: 'about' },
-          { type: 'separator' },
-          { role: 'services' },
-          { type: 'separator' },
-          { role: 'hide' },
-          { role: 'hideOthers' },
-          { role: 'unhide' },
-          { type: 'separator' },
-          { role: 'quit' }
-        ]
-      }]
-    : []),
+const template: MenuItemConstructorOptions[] = [
   // { role: 'fileMenu' }
   {
     label: 'File',
@@ -49,7 +34,9 @@ const template = [
       { type: 'separator' },
       {
         label: '&Open...',
-        click: () => mainWindow.webContents.send('open')
+        click: async () => {
+          await openFile(mainWindow)
+        }
       },
       { type: 'separator' },
       {
@@ -69,25 +56,25 @@ const template = [
       { role: 'cut' },
       { role: 'copy' },
       { role: 'paste' },
-      ...(isMac
-        ? [
-            { role: 'pasteAndMatchStyle' },
-            { role: 'delete' },
-            { role: 'selectAll' },
-            { type: 'separator' },
-            {
-              label: 'Speech',
-              submenu: [
-                { role: 'startSpeaking' },
-                { role: 'stopSpeaking' }
-              ]
-            }
-          ]
-        : [
-            { role: 'delete' },
-            { type: 'separator' },
-            { role: 'selectAll' }
-          ])
+      // ...(isMac
+      //   ? [
+      //       { role: 'pasteAndMatchStyle' },
+      //       { role: 'delete' },
+      //       { role: 'selectAll' },
+      //       { type: 'separator' },
+      //       {
+      //         label: 'Speech',
+      //         submenu: [
+      //           { role: 'startSpeaking' },
+      //           { role: 'stopSpeaking' }
+      //         ]
+      //       }
+      //     ]
+      //   : [
+      //       { role: 'delete' },
+      //       { type: 'separator' },
+      //       { role: 'selectAll' }
+      //     ])
     ]
   },
   {
@@ -154,16 +141,17 @@ const template = [
     submenu: [
       { role: 'minimize' },
       { role: 'zoom' },
-      ...(isMac
-        ? [
-            { type: 'separator' },
-            { role: 'front' },
-            { type: 'separator' },
-            { role: 'window' }
-          ]
-        : [
-            { role: 'close' }
-          ])
+      // TODO: Figure out how to make TypeScript happy with destructuring
+      // ...(isMac
+      //   ? [
+      //       { type: 'separator' },
+      //       { role: 'front' },
+      //       { type: 'separator' },
+      //       { role: 'window' }
+      //     ]
+      //   : [
+      //       { role: 'close' }
+      //     ])
     ]
   },
   {
@@ -183,6 +171,24 @@ const template = [
     ]
   }
 ]
+
+// Add the Mac app menu
+if (isMac) {
+  template.unshift({
+    label: app.name,
+    submenu: [
+      { role: 'about' },
+      { type: 'separator' },
+      { role: 'services' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideOthers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      { role: 'quit' }
+    ]
+  })
+}
 
 const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)

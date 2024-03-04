@@ -2,11 +2,10 @@
     "name": "cv-frontend-vue",
     "version": "0.0.0",
     "private": true,
-    "main": "main.js",
     "scripts": {
-        "start": "electron .",
+        "start": "electron ./out/main.js",
         "serve": "vite preview",
-        "build": "vite build",
+        "build": "vite build && tsc -p ./native --outDir ./out",
         "dev": "vite",
         "preview": "vite preview",
         "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
