@@ -29,18 +29,19 @@ const template: MenuItemConstructorOptions[] = [
     submenu: [
       {
         label: '&New File...',
+        accelerator: process.platform === 'darwin' ? 'Cmd+N' : 'Ctrl+N',
         click: () => mainWindow.webContents.send('new-file')
       },
       { type: 'separator' },
       {
         label: '&Open...',
-        click: async () => {
-          await openFile(mainWindow)
-        }
+        accelerator: process.platform === 'darwin' ? 'Cmd+O' : 'Ctrl+O',
+        click: async () => await openFile(mainWindow)
       },
       { type: 'separator' },
       {
-        label: '&Save',
+        label: '&Save As...',
+        accelerator: process.platform === 'darwin' ? 'Cmd+S' : 'Ctrl+S',
         click: () => mainWindow.webContents.send('save')
       },
       isMac ? { role: 'close' } : { role: 'quit' }

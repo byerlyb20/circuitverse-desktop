@@ -21,6 +21,10 @@ import '@fortawesome/fontawesome-free/css/all.css'
 
 import logixFunction from './simulator/src/data'
 
+import { useProjectStore } from '#/store/projectStore'
+import { generateSaveData } from '#/simulator/src/data/save'
+import { download } from '#/simulator/src/utils'
+
 loadFonts()
 
 const app = createApp(App)
@@ -74,7 +78,14 @@ window.electronAPI.onOpen((fileData) => {
     }
 })
 
-window.electronAPI.onSave(() => logixFunction.ExportProject())
+window.electronAPI.onSave(async () => {
+    const projectName = useProjectStore().getProjectName
+    const circuitData = await generateSaveData(
+        projectName,
+        false
+    )
+    download(`${projectName}.cv`, circuitData)
+})
 window.electronAPI.onNewVerilogModule(() => logixFunction.newVerilogModule())
 window.electronAPI.onInsertSubcircuit(() => logixFunction.createSubCircuitPrompt())
 window.electronAPI.onPreviewCircuit(() => logixFunction.fullViewOption())

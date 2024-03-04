@@ -6,7 +6,7 @@ export async function openFile(window: BrowserWindow) {
         filters: [
             { name: 'Circuits', extensions: ['cv'] }
         ],
-        properties: ['openFile', 'openDirectory']
+        properties: ['openFile']
     })
     
     if (filePaths.length <= 0) {
